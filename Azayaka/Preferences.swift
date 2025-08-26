@@ -79,6 +79,7 @@ struct Preferences: View {
             GroupBox {
                 Form {
                     Picker("FPS", selection: $frameRate) {
+                        Text("120").tag(120)
                         Text("60").tag(60)
                         Text("30").tag(30)
                         Text("25").tag(25)
