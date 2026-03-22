@@ -13,19 +13,19 @@ extension AppDelegate: NSMenuDelegate {
         menu.delegate = self
 
         if isRecording {
-            menu.addItem(header("Recording Call Audio".local, size: 12))
-
-            menu.addItem(NSMenuItem(title: "Stop Recording".local, action: #selector(stopRecording), keyEquivalent: ""))
-            menu.addItem(NSMenuItem.separator())
-            menu.addItem(info)
-
-            updateTimer?.invalidate()
-            updateTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                self.updateMenu()
+            // While recording, clicking the icon stops directly — no menu
+            statusItem.menu = nil
+            if let button = statusItem.button {
+                button.target = self
+                button.action = #selector(stopRecording)
             }
-            RunLoop.current.add(updateTimer!, forMode: .common)
-            updateTimer?.fire()
+            return
         } else {
+            // Restore menu behavior when not recording
+            if let button = statusItem.button {
+                button.target = nil
+                button.action = nil
+            }
             let audio = NSMenuItemWithIcon(icon: "waveform.circle.fill", title: "Record Call Audio".local, action: #selector(prepRecord))
             audio.identifier = NSUserInterfaceItemIdentifier(rawValue: "audio")
             menu.addItem(audio)
