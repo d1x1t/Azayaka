@@ -72,8 +72,8 @@ extension AppDelegate: NSMenuDelegate {
 
     func updateIcon() {
         if let button = statusItem.button {
-            let iconView = NSHostingView(rootView: MenuBar(recordingStatus: isRecording, recordingLength: getRecordingLength()))
-            iconView.frame = NSRect(x: 0, y: 1, width: isRecording ? 72 : 33, height: 20)
+            let iconView = NSHostingView(rootView: MenuBar(recordingStatus: isRecording))
+            iconView.frame = NSRect(x: 0, y: 1, width: 33, height: 20)
             button.subviews = [iconView]
             button.frame = iconView.frame
             button.setAccessibilityLabel("Azayaka")

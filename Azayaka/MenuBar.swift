@@ -23,9 +23,6 @@ struct MenuBar: View {
                 if recordingStatus {
                     Image(systemName: "record.circle")
                         .foregroundStyle(.red)
-                    Text(recordingLength)
-                        .offset(y: -0.5)
-                        .monospacedDigit()
                 } else {
                     Image(systemName: "app.fill")
                 }
