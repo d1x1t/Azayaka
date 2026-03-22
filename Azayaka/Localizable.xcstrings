@@ -38,24 +38,6 @@
     "%lld" : {
       "shouldTranslate" : false
     },
-    "15" : {
-      "shouldTranslate" : false
-    },
-    "24" : {
-      "shouldTranslate" : false
-    },
-    "25" : {
-      "shouldTranslate" : false
-    },
-    "30" : {
-      "shouldTranslate" : false
-    },
-    "60" : {
-      "shouldTranslate" : false
-    },
-    "120" : {
-
-    },
     "A window" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -449,6 +431,7 @@
       }
     },
     "Doesn't apply to system audio-only recordings. Uses the currently set input device. When not using the system recorder, this will be written as a separate audio track." : {
+      "extractionState" : "stale",
       "localizations" : {
         "sv" : {
           "stringUnit" : {
@@ -666,12 +649,6 @@
         }
       }
     },
-    "H.264" : {
-      "shouldTranslate" : false
-    },
-    "H.265" : {
-      "shouldTranslate" : false
-    },
     "High" : {
       "comment" : "As in \"Recording quality: High\"",
       "extractionState" : "manual",
@@ -806,8 +783,8 @@
         }
       }
     },
-    "MOV" : {
-      "shouldTranslate" : false
+    "Mixed into a single audio track. Uses the currently set input device." : {
+
     },
     "Move to Trash" : {
       "extractionState" : "manual",
@@ -819,9 +796,6 @@
           }
         }
       }
-    },
-    "MP4" : {
-      "shouldTranslate" : false
     },
     "No thanks, quit" : {
       "extractionState" : "manual",
@@ -1270,6 +1244,7 @@
       }
     },
     "Since macOS Sequoia, Azayaka can use Apple's provided recorder instead of its own. Try it if Azayaka's recorder has issues for you.\n- It has a fixed audio quality of 128Kbps AAC.\n- Audio-only recordings will always use Azayaka's recorder regardless of this setting." : {
+      "extractionState" : "stale",
       "localizations" : {
         "sv" : {
           "stringUnit" : {
@@ -1421,6 +1396,7 @@
       }
     },
     "Use system recorder" : {
+      "extractionState" : "stale",
       "localizations" : {
         "sv" : {
           "stringUnit" : {
@@ -1431,6 +1407,7 @@
       }
     },
     "Using Apple's recorder instead of Azayaka's own requires macOS Sequoia or newer." : {
+      "extractionState" : "stale",
       "localizations" : {
         "sv" : {
           "stringUnit" : {
@@ -1458,6 +1435,7 @@
       }
     },
     "When using the system recorder, these settings only apply to audio-only recordings. Screen recordings will always be 128Kbps AAC." : {
+      "extractionState" : "stale",
       "localizations" : {
         "sv" : {
           "stringUnit" : {
