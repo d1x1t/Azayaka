@@ -75,21 +75,30 @@ final class Transcriber {
             throw TranscriberError.noResults
         }
 
-        // Post-process: merge consecutive segments with <2s gap into one line
-        var merged: [(timestamp: Double, text: String)] = []
+        // Split large segments at sentence boundaries (. ? !) for readability
+        var lines: [String] = []
         for seg in segments {
-            if let last = merged.last,
-               seg.startSeconds - last.timestamp < 2.0,
-               !last.text.hasSuffix(".") && !last.text.hasSuffix("?") && !last.text.hasSuffix("!") {
-                // Merge into previous segment
-                merged[merged.count - 1].text += " " + seg.text
-            } else {
-                merged.append((timestamp: seg.startSeconds, text: seg.text))
+            let sentences = splitIntoSentences(seg.text)
+            for sentence in sentences {
+                let trimmed = sentence.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                if !trimmed.isEmpty {
+                    lines.append("[\(formatTimestamp(seg.startSeconds))] \(trimmed)")
+                }
             }
         }
 
-        let lines = merged.map { "[\(formatTimestamp($0.timestamp))] \($0.text)" }
         return lines.joined(separator: "\n")
+    }
+
+    private func splitIntoSentences(_ text: String) -> [String] {
+        var sentences: [String] = []
+        text.enumerateSubstrings(in: text.startIndex..., options: .bySentences) { substring, _, _, _ in
+            if let s = substring {
+                sentences.append(s)
+            }
+        }
+        // If no sentence boundaries found, return the whole text
+        return sentences.isEmpty ? [text] : sentences
     }
 
     private func formatTimestamp(_ seconds: Double) -> String {
