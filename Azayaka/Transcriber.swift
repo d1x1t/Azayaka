@@ -39,11 +39,11 @@ final class Transcriber {
 
         let audioFile = try AVAudioFile(forReading: fileURL)
 
-        // DictationTranscriber with timeIndexedLongDictation produces
-        // sentence-level segments instead of word-by-word fragments
-        let transcriber = DictationTranscriber(
+        // SpeechTranscriber with .transcription emits one final result per
+        // segment (no progressive partial updates). We split into sentences after.
+        let transcriber = SpeechTranscriber(
             locale: Locale(identifier: "en-US"),
-            preset: .timeIndexedLongDictation
+            preset: .transcription
         )
 
         let analyzer = try await SpeechAnalyzer(
