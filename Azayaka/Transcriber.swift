@@ -42,7 +42,7 @@ final class Transcriber {
         // Create a SpeechTranscriber with time-indexed preset for segment timestamps
         let transcriber = SpeechTranscriber(
             locale: Locale(identifier: "en-US"),
-            preset: .timeIndexedProgressiveTranscription
+            preset: .timeIndexedTranscriptionWithAlternatives
         )
 
         // Create SpeechAnalyzer with the audio file, finish when file ends
