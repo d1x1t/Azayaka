@@ -135,6 +135,13 @@ extension AppDelegate {
                             await MainActor.run {
                                 self.sendTranscriptFinishedNotification(path: txtURL.path)
                             }
+                            // Send to webhook if enabled
+                            if self.ud.bool(forKey: Preferences.kWebhookEnabled),
+                               let urlString = self.ud.string(forKey: Preferences.kWebhookURL),
+                               !urlString.isEmpty,
+                               let webhookURL = URL(string: urlString) {
+                                self.sendToWebhook(transcript: transcript, url: webhookURL)
+                            }
                         } catch {
                             print("Transcription failed: \(error)")
                         }
@@ -241,5 +248,20 @@ extension AppDelegate {
             alert.runModal()
             self.allowShortcuts(true)
         }
+    }
+
+    func sendToWebhook(transcript: String, url: URL) {
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body = ["transcript": transcript]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        URLSession.shared.dataTask(with: request) { _, response, error in
+            if let error {
+                print("Webhook failed: \(error)")
+            } else if let http = response as? HTTPURLResponse {
+                print("Webhook response: \(http.statusCode)")
+            }
+        }.resume()
     }
 }

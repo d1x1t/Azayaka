@@ -62,6 +62,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, SCStreamDelegate, SCStreamOu
                 Preferences.kSaveDirectory: saveDirectory,
                 Preferences.kAutoClipboard: false,
 
+                Preferences.kWebhookEnabled: false,
+                Preferences.kWebhookURL: "",
+
                 Preferences.kUpdateCheck: true,
                 Preferences.kCountdownSecs: 0
             ]

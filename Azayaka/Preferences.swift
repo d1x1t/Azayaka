@@ -20,6 +20,9 @@ struct Preferences: View {
     static let kSaveDirectory   = "saveDirectory"
     static let kAutoClipboard   = "autoCopyToClipboard"
 
+    static let kWebhookEnabled  = "webhookEnabled"
+    static let kWebhookURL      = "webhookURL"
+
     static let kUpdateCheck     = "updateCheck"
     static let kCountdownSecs   = "countDown"
 
@@ -196,6 +199,8 @@ struct Preferences: View {
         @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
         @AppStorage(kUpdateCheck)    private var updateCheck: Bool = true
         @AppStorage(kCountdownSecs)  private var countDown: Int = 0
+        @AppStorage(kWebhookEnabled) private var webhookEnabled: Bool = false
+        @AppStorage(kWebhookURL)     private var webhookURL: String = ""
 
         private var numberFormatter: NumberFormatter {
             let formatter = NumberFormatter()
@@ -239,6 +244,18 @@ struct Preferences: View {
                         Text("Countdown to start recording, in seconds.")
                             .font(.subheadline).foregroundColor(Color.gray)
                     }.padding(10).frame(maxWidth: .infinity)
+                }.padding([.leading, .trailing], 10)
+                GroupBox {
+                    VStack(alignment: .leading) {
+                        Toggle(isOn: $webhookEnabled) {
+                            Text("Send transcript to webhook")
+                        }
+                        TextField("Webhook URL", text: $webhookURL)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .disabled(!webhookEnabled)
+                    }.padding(10)
+                    Text("After transcription, POST the transcript as JSON to this URL.")
+                        .font(.footnote).foregroundColor(Color.gray).padding([.bottom, .leading, .trailing], 10)
                 }.padding([.leading, .trailing], 10)
                 HStack {
                     Text("Azayaka \(getVersion()) (\(getBuild()))").foregroundColor(Color.secondary)
