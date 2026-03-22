@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  Azayaka
+//  Koe
 //
 //  Created by Martin Persson on 2022-12-25.
 //
@@ -14,7 +14,7 @@ import UserNotifications
 import SwiftUI
 
 @main
-struct Azayaka: App {
+struct Koe: App {
     @StateObject private var appState = AppState()
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
@@ -39,7 +39,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, SCStreamDelegate, SCStreamOu
     let info = NSMenuItem(title: "One moment, waiting on update".local, action: nil, keyEquivalent: "")
     let preferences = NSWindow()
     let ud = UserDefaults.standard
-    let UpdateHandler = Updates()
 
     var startTime: Date?
     var micSampleFIFO: [[Float]] = [[], []]
@@ -65,7 +64,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, SCStreamDelegate, SCStreamOu
                 Preferences.kWebhookEnabled: false,
                 Preferences.kWebhookURL: "",
 
-                Preferences.kUpdateCheck: true,
                 Preferences.kCountdownSecs: 0
             ]
         )
@@ -79,20 +77,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, SCStreamDelegate, SCStreamOu
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
             if let error = error { print("Notification authorisation denied: \(error.localizedDescription)") }
         }
-
-        #if !DEBUG
-        if ud.bool(forKey: Preferences.kUpdateCheck) {
-            UpdateHandler.checkForUpdates()
-        }
-        #endif
     }
 
     func requestPermissions() {
         allowShortcuts(false)
         DispatchQueue.main.async {
             let alert = NSAlert()
-            alert.messageText = "Azayaka needs permissions!".local
-            alert.informativeText = "Azayaka needs screen recording permissions to capture system audio.".local
+            alert.messageText = "Koe needs permissions!".local
+            alert.informativeText = "Koe needs screen recording permissions to capture system audio.".local
             alert.addButton(withTitle: "Open Settings".local)
             alert.addButton(withTitle: "Okay".local)
             alert.addButton(withTitle: "No thanks, quit".local)

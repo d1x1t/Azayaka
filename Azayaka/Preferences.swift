@@ -1,6 +1,6 @@
 //
 //  Preferences.swift
-//  Azayaka
+//  Koe
 //
 //  Created by Martin Persson on 2022-12-27.
 //
@@ -23,7 +23,6 @@ struct Preferences: View {
     static let kWebhookEnabled  = "webhookEnabled"
     static let kWebhookURL      = "webhookURL"
 
-    static let kUpdateCheck     = "updateCheck"
     static let kCountdownSecs   = "countDown"
 
     var body: some View {
@@ -105,8 +104,8 @@ struct Preferences: View {
             recordMic = false
             DispatchQueue.main.async {
                 let alert = NSAlert()
-                alert.messageText = "Azayaka needs permissions!".local
-                alert.informativeText = "Azayaka needs permission to record your microphone to do this.".local
+                alert.messageText = "Koe needs permissions!".local
+                alert.informativeText = "Koe needs permission to record your microphone to do this.".local
                 alert.addButton(withTitle: "Open Settings".local)
                 alert.addButton(withTitle: "No thanks".local)
                 alert.alertStyle = .warning
@@ -197,7 +196,6 @@ struct Preferences: View {
 
     struct OtherSettings: View {
         @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
-        @AppStorage(kUpdateCheck)    private var updateCheck: Bool = true
         @AppStorage(kCountdownSecs)  private var countDown: Int = 0
         @AppStorage(kWebhookEnabled) private var webhookEnabled: Bool = false
         @AppStorage(kWebhookURL)     private var webhookURL: String = ""
@@ -227,12 +225,7 @@ struct Preferences: View {
                                 print("Failed to \(newValue ? "enable" : "disable") launch at login: \(error.localizedDescription)")
                             }
                         }
-                        Toggle(isOn: $updateCheck) {
-                            Text("Check for updates at launch")
-                        }
                     }.padding([.top, .leading, .trailing], 10).frame(width: 250)
-                    Text("Azayaka will check [GitHub](https://github.com/Mnpn/Azayaka/releases) for new updates.")
-                        .font(.footnote).foregroundColor(Color.gray).frame(maxWidth: .infinity).padding([.bottom, .leading, .trailing], 10)
                 }.padding([.top, .leading, .trailing], 10)
                 GroupBox {
                     VStack {
@@ -258,9 +251,8 @@ struct Preferences: View {
                         .font(.footnote).foregroundColor(Color.gray).padding([.bottom, .leading, .trailing], 10)
                 }.padding([.leading, .trailing], 10)
                 HStack {
-                    Text("Azayaka \(getVersion()) (\(getBuild()))").foregroundColor(Color.secondary)
+                    Text("Koe \(getVersion()) (\(getBuild()))").foregroundColor(Color.secondary)
                     Spacer()
-                    Text("https://mnpn.dev")
                 }.padding(12).background { VisualEffectView() }.frame(height: 42)
             }
         }

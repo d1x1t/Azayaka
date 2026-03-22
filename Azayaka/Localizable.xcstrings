@@ -58,6 +58,9 @@
     "AAC" : {
       "shouldTranslate" : false
     },
+    "After transcription, POST the transcript as JSON to this URL." : {
+
+    },
     "ALAC (Lossless)" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1208,6 +1211,9 @@
         }
       }
     },
+    "Send transcript to webhook" : {
+
+    },
     "Shortcuts" : {
       "comment" : "Keyboard shortcuts",
       "extractionState" : "manual",
@@ -1433,6 +1439,9 @@
           }
         }
       }
+    },
+    "Webhook URL" : {
+
     },
     "When using the system recorder, these settings only apply to audio-only recordings. Screen recordings will always be 128Kbps AAC." : {
       "extractionState" : "stale",

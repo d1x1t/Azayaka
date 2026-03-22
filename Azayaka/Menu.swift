@@ -1,6 +1,6 @@
 //
 //  Menu.swift
-//  Azayaka
+//  Koe
 //
 //  Created by Martin Persson on 2022-12-26.
 //
@@ -55,11 +55,8 @@ extension AppDelegate: NSMenuDelegate {
 
     func addMenuFooter(toMenu menu: NSMenu) {
         menu.addItem(NSMenuItem.separator())
-        if let updateNotice = UpdateHandler.createUpdateNotice() {
-            menu.addItem(updateNotice)
-        }
         menu.addItem(NSMenuItem(title: "Preferences…".local, action: #selector(openPreferences), keyEquivalent: ","))
-        menu.addItem(NSMenuItem(title: "Quit Azayaka".local, action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: "Quit Koe".local, action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
     }
 
     func menuWillOpen(_ menu: NSMenu) {
@@ -76,12 +73,8 @@ extension AppDelegate: NSMenuDelegate {
             iconView.frame = NSRect(x: 0, y: 1, width: 33, height: 20)
             button.subviews = [iconView]
             button.frame = iconView.frame
-            button.setAccessibilityLabel("Azayaka")
+            button.setAccessibilityLabel("Koe")
         }
-    }
-
-    @objc func openUpdatePage() {
-        NSWorkspace.shared.open(URL(string: UpdateHandler.updateURL)!)
     }
 }
 

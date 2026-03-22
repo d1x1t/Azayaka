@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		170297D62BCD586A0035EB26 /* Updates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170297D52BCD586A0035EB26 /* Updates.swift */; };
+
 		17322D4B2958D07E00185BB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17322D4A2958D07E00185BB6 /* AppDelegate.swift */; };
 		17322D4F2958D08000185BB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17322D4E2958D08000185BB6 /* Assets.xcassets */; };
 		17322D5C295928BE00185BB6 /* Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17322D5B295928BE00185BB6 /* Recording.swift */; };
@@ -25,7 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		170297D52BCD586A0035EB26 /* Updates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updates.swift; sourceTree = "<group>"; };
+
 		17322D472958D07E00185BB6 /* Azayaka.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Azayaka.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17322D4A2958D07E00185BB6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		17322D4E2958D08000185BB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -82,7 +82,7 @@
 				18B09ABB2BCBA40B005CDC4E /* MenuBar.swift */,
 				174D79872C6417D7005669BF /* Notifications.swift */,
 				17F7E18A2C65096800599CEF /* ClassicProcessing.swift */,
-				170297D52BCD586A0035EB26 /* Updates.swift */,
+
 				17606AEC2C694FE0008A064E /* Shortcuts.swift */,
 				7B2603872C0850CD00C47D89 /* Countdown.swift */,
 				ABCD00001234567890ABCDEF /* Transcriber.swift */,
@@ -181,7 +181,7 @@
 				7B2603882C0850CD00C47D89 /* Countdown.swift in Sources */,
 				18B09ABC2BCBA40B005CDC4E /* MenuBar.swift in Sources */,
 				ABCD00011234567890ABCDEF /* Transcriber.swift in Sources */,
-				170297D62BCD586A0035EB26 /* Updates.swift in Sources */,
+
 				17322D5E295929A000185BB6 /* Menu.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -321,12 +321,12 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 67;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = AR2R27UT9N;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Azayaka;
+				INFOPLIST_KEY_CFBundleDisplayName = Koe;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -338,8 +338,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.4;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.mnpn.Azayaka;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dawid.Koe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_SWIFT_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -356,12 +356,12 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 67;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = AR2R27UT9N;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Azayaka;
+				INFOPLIST_KEY_CFBundleDisplayName = Koe;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -373,8 +373,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.4;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.mnpn.Azayaka;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dawid.Koe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_SWIFT_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;

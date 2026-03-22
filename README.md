@@ -1,27 +1,28 @@
-<h1><img align="center" height="72" src="https://github.com/Mnpn/Azayaka/raw/main/Azayaka/Assets.xcassets/AppIcon.appiconset/Azayaka-256.png"> Azayaka</h1>
+# Koe
 
-**A simple macOS menu bar audio recorder for capturing system audio and microphone** — perfect for recording calls, meetings, and any audio playing on your Mac.
-
-Based on [Mnpn/Azayaka](https://github.com/Mnpn/Azayaka), simplified to focus on audio-only recording with microphone mixing.
+**A simple macOS menu bar audio recorder for capturing system audio and microphone** — perfect for recording calls, meetings, and any audio playing on your Mac. Includes on-device transcription.
 
 ## Features
 
 - **One-click recording** — capture system audio from any app (Teams, Zoom, YouTube, etc.)
 - **Microphone mixing** — optionally mix your mic into the same audio track
+- **On-device transcription** — automatically transcribe recordings using Apple's SpeechAnalyzer (macOS 26+)
+- **Webhook integration** — optionally POST transcripts to any URL (Make, Zapier, n8n, etc.)
 - **Audio format options** — AAC, ALAC (lossless), FLAC, or Opus
 - **Configurable quality** — 128–320 Kbps for lossy formats
 - **Keyboard shortcut** — start/stop recording without touching the mouse
-- **Menu bar app** — stays out of your way, shows recording duration
+- **Menu bar app** — stays out of your way; click to record, click again to stop
 
 ## How it works
 
-Uses macOS ScreenCaptureKit to capture system audio (requires Screen Recording permission). When microphone recording is enabled, mic audio is resampled to match the system audio format and mixed into a single output track in real time.
+Uses macOS ScreenCaptureKit to capture system audio (requires Screen Recording permission). When microphone recording is enabled, mic audio is resampled to match the system audio format and mixed into a single output track in real time. After recording stops, the audio file is transcribed on-device and saved as a .txt file alongside the recording.
 
 ## Requirements
 
-- macOS 13 (Ventura) or later
+- macOS 13 (Ventura) or later (transcription requires macOS 26)
 - Screen Recording permission (for system audio capture)
 - Microphone permission (optional, for mic recording)
+- Speech Recognition permission (for transcription)
 
 ## Building
 
@@ -32,4 +33,4 @@ Uses macOS ScreenCaptureKit to capture system audio (requires Screen Recording p
 
 ## Credits
 
-Originally created by [Martin Persson (Mnpn)](https://github.com/Mnpn/Azayaka). This fork removes video/screen recording and adds microphone mixing for audio-only use.
+Based on [Azayaka](https://github.com/Mnpn/Azayaka) by Martin Persson. This fork removes video/screen recording and adds microphone mixing, on-device transcription, and webhook integration.
