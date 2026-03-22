@@ -41,7 +41,7 @@ final class Transcriber {
         // Create a SpeechTranscriber with time-indexed preset for segment timestamps
         let transcriber = SpeechTranscriber(
             locale: Locale(identifier: "en-US"),
-            preset: .timeIndexedLongDictation
+            preset: .timeIndexedProgressiveTranscription
         )
 
         // Create SpeechAnalyzer with the audio file, finish when file ends
@@ -58,7 +58,7 @@ final class Transcriber {
             guard !startSeconds.isNaN else { continue }
             let timestamp = formatTimestamp(startSeconds)
             let text = String(result.text.characters)
-            if !text.trimmingCharacters(in: .whitespaces).isEmpty {
+            if !text.trimmingCharacters(in: CharacterSet.whitespaces).isEmpty {
                 lines.append("[\(timestamp)] \(text)")
             }
         }
