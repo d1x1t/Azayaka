@@ -121,6 +121,25 @@ extension AppDelegate {
                 allowShortcuts(true)
                 sendRecordingFinishedNotification()
                 copyToClipboard([NSURL(fileURLWithPath: filePath)])
+
+                // Transcribe the recording on-device
+                if let path = filePath {
+                    let audioURL = URL(fileURLWithPath: path)
+                    Task {
+                        do {
+                            let transcriber = Transcriber()
+                            let transcript = try await transcriber.transcribe(fileURL: audioURL)
+                            let txtURL = audioURL.deletingPathExtension().appendingPathExtension("txt")
+                            try transcript.write(to: txtURL, atomically: true, encoding: .utf8)
+                            print("Transcript saved to \(txtURL.path)")
+                            await MainActor.run {
+                                self.sendTranscriptFinishedNotification(path: txtURL.path)
+                            }
+                        } catch {
+                            print("Transcription failed: \(error)")
+                        }
+                    }
+                }
             }
         }
     }

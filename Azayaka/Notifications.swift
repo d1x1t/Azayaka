@@ -42,6 +42,19 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         }
     }
 
+    func sendTranscriptFinishedNotification(path: String) {
+        let un = UNUserNotificationCenter.current()
+        let content = UNMutableNotificationContent()
+        content.title = "Transcript Saved".local
+        content.body = String(format: "Saved to: %@".local, path)
+        content.sound = UNNotificationSound.default
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
+        let request = UNNotificationRequest(identifier: "azayaka.transcript.\(Date.now)", content: content, trigger: trigger)
+        un.add(request) { error in
+            if let error = error { print("Transcript notification failed: \(error.localizedDescription)") }
+        }
+    }
+
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler:
