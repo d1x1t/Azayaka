@@ -19,14 +19,8 @@ struct MenuBar: View {
                     .cornerRadius(3)
                     .opacity(0.1)
             }
-            HStack(spacing: 2.5) {
-                if recordingStatus {
-                    Image(systemName: "record.circle")
-                        .foregroundStyle(.red)
-                } else {
-                    Image(systemName: "app.fill")
-                }
-            }
+            Image(systemName: "app.fill")
+                .foregroundStyle(recordingStatus ? .blue : .primary)
         }
     }
 }
