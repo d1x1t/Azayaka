@@ -57,7 +57,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SCStreamDelegate, SCStreamOu
     var vwInput, awInput, micInput: AVAssetWriterInput!
     let audioEngine = AVAudioEngine()
     var startTime: Date?
-    var pendingMicBuffers: [AVAudioPCMBuffer] = []
+    var micSampleFIFO: [[Float]] = [[], []]  // per-channel FIFO (stereo)
     var micConverter: AVAudioConverter?
     var micConverterInputFormat: AVAudioFormat?
 

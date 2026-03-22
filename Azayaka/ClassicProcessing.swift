@@ -104,7 +104,7 @@ extension AppDelegate {
                         // Convert mic to system audio format (sample rate + channels may differ)
                         let sysFormat = AVAudioFormat(standardFormatWithSampleRate: 48000, channels: 2)!
                         if let converted = convertBuffer(micPCM, to: sysFormat) {
-                            pendingMicBuffers.append(converted)
+                            appendToMicFIFO(converted)
                         }
                     }
                 } else {
@@ -150,25 +150,43 @@ extension AppDelegate {
         return outputBuffer
     }
 
-    func mixPendingMicInto(buffer sysBuffer: AVAudioPCMBuffer) {
-        guard !pendingMicBuffers.isEmpty else { return }
-        let micBuffers = pendingMicBuffers
-        pendingMicBuffers.removeAll()
+    func appendToMicFIFO(_ buffer: AVAudioPCMBuffer) {
+        guard let chData = buffer.floatChannelData else { return }
+        let frames = Int(buffer.frameLength)
+        let chanCount = Int(buffer.format.channelCount)
+        for c in 0..<min(chanCount, micSampleFIFO.count) {
+            micSampleFIFO[c].append(contentsOf: UnsafeBufferPointer(start: chData[c], count: frames))
+        }
+        // If mono mic, duplicate to second channel
+        if chanCount == 1 && micSampleFIFO.count > 1 {
+            micSampleFIFO[1].append(contentsOf: UnsafeBufferPointer(start: chData[0], count: frames))
+        }
+        // Cap FIFO at ~1 second (48000 samples) to prevent unbounded growth
+        let maxSamples = 48000
+        for c in 0..<micSampleFIFO.count {
+            if micSampleFIFO[c].count > maxSamples {
+                micSampleFIFO[c].removeFirst(micSampleFIFO[c].count - maxSamples)
+            }
+        }
+    }
 
+    func mixPendingMicInto(buffer sysBuffer: AVAudioPCMBuffer) {
+        guard !micSampleFIFO[0].isEmpty else { return }
         guard let sysCh = sysBuffer.floatChannelData else { return }
         let sysFrames = Int(sysBuffer.frameLength)
         let sysChanCount = Int(sysBuffer.format.channelCount)
 
-        for micBuf in micBuffers {
-            guard let micCh = micBuf.floatChannelData else { continue }
-            let frames = min(Int(micBuf.frameLength), sysFrames)
-            let micChanCount = Int(micBuf.format.channelCount)
-            for f in 0..<frames {
-                for c in 0..<sysChanCount {
-                    let mc = min(c, micChanCount - 1)
-                    sysCh[c][f] = max(-1.0, min(1.0, sysCh[c][f] + micCh[mc][f]))
-                }
+        // Drain exactly sysFrames samples from the FIFO (or fewer if not enough)
+        let available = min(micSampleFIFO[0].count, sysFrames)
+        for c in 0..<sysChanCount {
+            let micCh = min(c, micSampleFIFO.count - 1)
+            for f in 0..<available {
+                sysCh[c][f] = max(-1.0, min(1.0, sysCh[c][f] + micSampleFIFO[micCh][f]))
             }
+        }
+        // Remove consumed samples
+        for c in 0..<micSampleFIFO.count {
+            micSampleFIFO[c].removeFirst(available)
         }
     }
 }
