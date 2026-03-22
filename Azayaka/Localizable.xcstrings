@@ -53,6 +53,9 @@
     "60" : {
       "shouldTranslate" : false
     },
+    "120" : {
+
+    },
     "A window" : {
       "extractionState" : "manual",
       "localizations" : {

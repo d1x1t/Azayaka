@@ -101,7 +101,11 @@ extension AppDelegate {
             case .microphone: // only available on sequoia - older versions will use AVAudioEngine
                 if streamType == .systemaudio {
                     if let micPCM = sampleBuffer.asPCMBuffer {
-                        pendingMicBuffers.append(micPCM)
+                        // Convert mic to system audio format (sample rate + channels may differ)
+                        let sysFormat = AVAudioFormat(standardFormatWithSampleRate: 48000, channels: 2)!
+                        if let converted = convertBuffer(micPCM, to: sysFormat) {
+                            pendingMicBuffers.append(converted)
+                        }
                     }
                 } else {
                     if (micInput != nil) && micInput.isReadyForMoreMediaData {
@@ -111,6 +115,42 @@ extension AppDelegate {
             @unknown default:
                 assertionFailure("unknown stream type".local)
         }
+    }
+
+    private var micConverter: AVAudioConverter?
+    private var micConverterInputFormat: AVAudioFormat?
+
+    func convertBuffer(_ input: AVAudioPCMBuffer, to outputFormat: AVAudioFormat) -> AVAudioPCMBuffer? {
+        // Skip conversion if formats already match
+        if input.format.sampleRate == outputFormat.sampleRate && input.format.channelCount == outputFormat.channelCount {
+            return input
+        }
+
+        // Create or reuse converter
+        if micConverter == nil || micConverterInputFormat != input.format {
+            micConverter = AVAudioConverter(from: input.format, to: outputFormat)
+            micConverterInputFormat = input.format
+        }
+        guard let converter = micConverter else { return nil }
+
+        // Calculate output frame count based on sample rate ratio
+        let ratio = outputFormat.sampleRate / input.format.sampleRate
+        let outputFrameCount = AVAudioFrameCount(Double(input.frameLength) * ratio)
+        guard let outputBuffer = AVAudioPCMBuffer(pcmFormat: outputFormat, frameCapacity: outputFrameCount) else { return nil }
+
+        var error: NSError?
+        var hasData = true
+        converter.convert(to: outputBuffer, error: &error) { _, outStatus in
+            if hasData {
+                hasData = false
+                outStatus.pointee = .haveData
+                return input
+            }
+            outStatus.pointee = .noDataNow
+            return nil
+        }
+        if let error { print("Mic conversion error: \(error)"); return nil }
+        return outputBuffer
     }
 
     func mixPendingMicInto(buffer sysBuffer: AVAudioPCMBuffer) {
