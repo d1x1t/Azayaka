@@ -1,21 +1,35 @@
 <h1><img align="center" height="72" src="https://github.com/Mnpn/Azayaka/raw/main/Azayaka/Assets.xcassets/AppIcon.appiconset/Azayaka-256.png"> Azayaka</h1>
 
-**A small and simple macOS menu bar-residing screen and system audio recorder** utilising the ScreenCaptureKit API introduced in macOS 13.<br>
-That's right, record your screen or an app, with its playing audio, regardless of your current audio output device or system volume.
+**A simple macOS menu bar audio recorder for capturing system audio and microphone** — perfect for recording calls, meetings, and any audio playing on your Mac.
 
-<p align="center">
-<img width="342" alt="Azayaka Menu UI" src="https://github.com/Mnpn/Azayaka/assets/17569187/8ad56e22-5284-4692-a2e7-456a24c83a41">
-<p>
+Based on [Mnpn/Azayaka](https://github.com/Mnpn/Azayaka), simplified to focus on audio-only recording with microphone mixing.
 
 ## Features
-<div><img src="https://github.com/Mnpn/Azayaka/assets/17569187/9218772a-2e9f-442f-a193-2b7ee800116e" alt="Azayaka's settings, video tab selected" width="457" height="auto" align="right"></img></div>
 
-- Record a screen, window, or just system audio
-- Simple, unobtrusive menu bar application
-- Choose between .mp4 or .mov files, H.264 or H.265
-- Audio options ranging from Opus & AAC to lossless ALAC & FLAC
+- **One-click recording** — capture system audio from any app (Teams, Zoom, YouTube, etc.)
+- **Microphone mixing** — optionally mix your mic into the same audio track
+- **Audio format options** — AAC, ALAC (lossless), FLAC, or Opus
+- **Configurable quality** — 128–320 Kbps for lossy formats
+- **Keyboard shortcut** — start/stop recording without touching the mouse
+- **Menu bar app** — stays out of your way, shows recording duration
 
-<p align="center">
-<br>
-<img width="286" alt="Azayaka recording IINA (menu UI)" src="https://github.com/Mnpn/Azayaka/assets/17569187/0736d588-c198-4dde-9de1-17a880ffd5c1">
-</p>
+## How it works
+
+Uses macOS ScreenCaptureKit to capture system audio (requires Screen Recording permission). When microphone recording is enabled, mic audio is resampled to match the system audio format and mixed into a single output track in real time.
+
+## Requirements
+
+- macOS 13 (Ventura) or later
+- Screen Recording permission (for system audio capture)
+- Microphone permission (optional, for mic recording)
+
+## Building
+
+1. Open `Azayaka.xcodeproj` in Xcode
+2. Select your signing team in **Signing & Capabilities**
+3. Build and run (Cmd+R)
+4. Grant Screen Recording permission when prompted
+
+## Credits
+
+Originally created by [Martin Persson (Mnpn)](https://github.com/Mnpn/Azayaka). This fork removes video/screen recording and adds microphone mixing for audio-only use.
