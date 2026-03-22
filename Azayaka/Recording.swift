@@ -69,11 +69,11 @@ extension AppDelegate {
 
     func record(audioOnly: Bool, filter: SCContentFilter) async {
         var conf = SCStreamConfiguration()
-        if #available(macOS 15.0, *), !audioOnly {
-            if await ud.bool(forKey: Preferences.kEnableHDR) {
+        if #available(macOS 15.0, *) {
+            if !audioOnly && await ud.bool(forKey: Preferences.kEnableHDR) {
                 conf = SCStreamConfiguration(preset: .captureHDRStreamCanonicalDisplay)
             }
-            conf.captureMicrophone = await ud.bool(forKey: Preferences.kRecordMic) && !audioOnly
+            conf.captureMicrophone = await ud.bool(forKey: Preferences.kRecordMic)
         }
 
         conf.width = 2

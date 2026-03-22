@@ -88,6 +88,7 @@ extension AppDelegate {
             case .audio:
                 if streamType == .systemaudio { // write directly to file if not video recording
                     guard let samples = sampleBuffer.asPCMBuffer else { return }
+                    mixPendingMicInto(buffer: samples)
                     do {
                         try audioFile!.write(from: samples)
                     }
@@ -98,13 +99,39 @@ extension AppDelegate {
                     }
                 }
             case .microphone: // only available on sequoia - older versions will use AVAudioEngine
-                if streamType != .systemaudio {
+                if streamType == .systemaudio {
+                    if let micPCM = sampleBuffer.asPCMBuffer {
+                        pendingMicBuffers.append(micPCM)
+                    }
+                } else {
                     if (micInput != nil) && micInput.isReadyForMoreMediaData {
                         micInput.append(sampleBuffer)
                     }
                 }
             @unknown default:
                 assertionFailure("unknown stream type".local)
+        }
+    }
+
+    func mixPendingMicInto(buffer sysBuffer: AVAudioPCMBuffer) {
+        guard !pendingMicBuffers.isEmpty else { return }
+        let micBuffers = pendingMicBuffers
+        pendingMicBuffers.removeAll()
+
+        guard let sysCh = sysBuffer.floatChannelData else { return }
+        let sysFrames = Int(sysBuffer.frameLength)
+        let sysChanCount = Int(sysBuffer.format.channelCount)
+
+        for micBuf in micBuffers {
+            guard let micCh = micBuf.floatChannelData else { continue }
+            let frames = min(Int(micBuf.frameLength), sysFrames)
+            let micChanCount = Int(micBuf.format.channelCount)
+            for f in 0..<frames {
+                for c in 0..<sysChanCount {
+                    let mc = min(c, micChanCount - 1)
+                    sysCh[c][f] = max(-1.0, min(1.0, sysCh[c][f] + micCh[mc][f]))
+                }
+            }
         }
     }
 }
