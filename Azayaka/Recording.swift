@@ -141,6 +141,8 @@ extension AppDelegate {
         DispatchQueue.main.async { [self] in
             statusItem.menu = nil
 
+            let wasAudioOnly = streamType == .systemaudio
+
             if stream != nil {
                 stream.stopCapture()
                 stream = nil
@@ -150,14 +152,23 @@ extension AppDelegate {
                 recordingOutput = nil
             } else {
                 startTime = nil
-                if streamType != .systemaudio {
+                if !wasAudioOnly {
                     closeVideo()
                 }
             }
             streamType = nil
-            audioFile = nil // close audio file
             window = nil
             screen = nil
+
+            // Close the audio file on the same queue used by stream callbacks
+            // to ensure all pending writes complete before the file is finalized
+            if wasAudioOnly {
+                DispatchQueue.global().async { [self] in
+                    audioFile = nil
+                }
+            } else {
+                audioFile = nil
+            }
 
             updateTimer?.invalidate()
 
