@@ -122,8 +122,8 @@ extension AppDelegate {
                 sendRecordingFinishedNotification()
                 copyToClipboard([NSURL(fileURLWithPath: filePath)])
 
-                // Transcribe the recording on-device
-                if let path = filePath {
+                // Transcribe the recording on-device (macOS 26+)
+                if #available(macOS 26.0, *), let path = filePath {
                     let audioURL = URL(fileURLWithPath: path)
                     Task {
                         do {

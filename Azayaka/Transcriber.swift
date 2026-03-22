@@ -25,6 +25,7 @@ final class Transcriber {
 
     /// Transcribe an audio file and return a timestamped transcript string.
     /// Each line: [HH:MM:SS] transcribed text
+    @available(macOS 26.0, *)
     func transcribe(fileURL: URL) async throws -> String {
         // Request authorization
         let status = await withCheckedContinuation { continuation in
