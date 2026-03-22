@@ -160,15 +160,7 @@ extension AppDelegate {
             window = nil
             screen = nil
 
-            // Close the audio file on the same queue used by stream callbacks
-            // to ensure all pending writes complete before the file is finalized
-            if wasAudioOnly {
-                DispatchQueue.global().async { [self] in
-                    audioFile = nil
-                }
-            } else {
-                audioFile = nil
-            }
+            audioFile = nil // close audio file
 
             updateTimer?.invalidate()
 

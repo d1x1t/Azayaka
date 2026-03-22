@@ -87,12 +87,12 @@ extension AppDelegate {
                 break
             case .audio:
                 if streamType == .systemaudio { // write directly to file if not video recording
-                    guard let samples = sampleBuffer.asPCMBuffer else { return }
+                    guard let samples = sampleBuffer.asPCMBuffer, let audioFile else { return }
                     mixPendingMicInto(buffer: samples)
                     do {
-                        try audioFile!.write(from: samples)
+                        try audioFile.write(from: samples)
                     }
-                    catch { assertionFailure("audio file writing issue".local) }
+                    catch { print("audio file writing issue: \(error)") }
                 } else { // otherwise send the audio data to AVAssetWriter
                     if (awInput != nil) && awInput.isReadyForMoreMediaData {
                         awInput.append(sampleBuffer)
