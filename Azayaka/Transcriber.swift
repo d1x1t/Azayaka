@@ -2,7 +2,7 @@
 //  Transcriber.swift
 //  Azayaka
 //
-//  On-device transcription using SpeechAnalyzer + SpeechTranscriber (macOS 26+).
+//  On-device transcription using SpeechAnalyzer + DictationTranscriber (macOS 26+).
 //  Transcribes an audio file and returns timestamped text.
 //
 
@@ -39,38 +39,56 @@ final class Transcriber {
 
         let audioFile = try AVAudioFile(forReading: fileURL)
 
-        // Create a SpeechTranscriber with time-indexed preset for segment timestamps
-        let transcriber = SpeechTranscriber(
+        // DictationTranscriber with timeIndexedLongDictation produces
+        // sentence-level segments instead of word-by-word fragments
+        let transcriber = DictationTranscriber(
             locale: Locale(identifier: "en-US"),
-            preset: .timeIndexedTranscriptionWithAlternatives
+            preset: .timeIndexedLongDictation
         )
 
-        // Create SpeechAnalyzer with the audio file, finish when file ends
         let analyzer = try await SpeechAnalyzer(
             inputAudioFile: audioFile,
             modules: [transcriber],
             finishAfterFile: true
         )
 
-        // Collect results
-        var lines: [String] = []
+        // Collect raw segments
+        struct Segment {
+            let startSeconds: Double
+            let text: String
+        }
+        var segments: [Segment] = []
+
         for try await result in transcriber.results {
             let startSeconds = result.range.start.seconds
             guard !startSeconds.isNaN else { continue }
-            let timestamp = formatTimestamp(startSeconds)
-            let text = String(result.text.characters)
-            if !text.trimmingCharacters(in: CharacterSet.whitespaces).isEmpty {
-                lines.append("[\(timestamp)] \(text)")
+            let text = String(result.text.characters).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            if !text.isEmpty {
+                segments.append(Segment(startSeconds: startSeconds, text: text))
             }
-        }
-
-        if lines.isEmpty {
-            throw TranscriberError.noResults
         }
 
         // Keep analyzer alive until results are consumed
         _ = analyzer
 
+        if segments.isEmpty {
+            throw TranscriberError.noResults
+        }
+
+        // Post-process: merge consecutive segments with <2s gap into one line
+        var merged: [(timestamp: Double, text: String)] = []
+        for seg in segments {
+            if let last = merged.last,
+               seg.startSeconds - last.timestamp < 2.0,
+               !last.text.hasSuffix(".") && !last.text.hasSuffix("?") && !last.text.hasSuffix("!") {
+                // Merge into previous segment
+                merged[merged.count - 1].text += " " + seg.text
+            } else {
+                merged.append((timestamp: seg.startSeconds, text: seg.text))
+            }
+        }
+
+        let lines = merged.map { "[\(formatTimestamp($0.timestamp))] \($0.text)" }
         return lines.joined(separator: "\n")
     }
 
