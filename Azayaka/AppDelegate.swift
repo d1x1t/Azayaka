@@ -58,6 +58,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SCStreamDelegate, SCStreamOu
     let audioEngine = AVAudioEngine()
     var startTime: Date?
     var micSampleFIFO: [[Float]] = [[], []]  // per-channel FIFO (stereo)
+    let micFIFOLock = NSLock()
     var micConverter: AVAudioConverter?
     var micConverterInputFormat: AVAudioFormat?
 

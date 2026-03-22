@@ -154,6 +154,8 @@ extension AppDelegate {
         guard let chData = buffer.floatChannelData else { return }
         let frames = Int(buffer.frameLength)
         let chanCount = Int(buffer.format.channelCount)
+        micFIFOLock.lock()
+        defer { micFIFOLock.unlock() }
         for c in 0..<min(chanCount, micSampleFIFO.count) {
             micSampleFIFO[c].append(contentsOf: UnsafeBufferPointer(start: chData[c], count: frames))
         }
@@ -171,8 +173,15 @@ extension AppDelegate {
     }
 
     func mixPendingMicInto(buffer sysBuffer: AVAudioPCMBuffer) {
-        guard !micSampleFIFO[0].isEmpty else { return }
-        guard let sysCh = sysBuffer.floatChannelData else { return }
+        micFIFOLock.lock()
+        guard !micSampleFIFO.isEmpty, !micSampleFIFO[0].isEmpty else {
+            micFIFOLock.unlock()
+            return
+        }
+        guard let sysCh = sysBuffer.floatChannelData else {
+            micFIFOLock.unlock()
+            return
+        }
         let sysFrames = Int(sysBuffer.frameLength)
         let sysChanCount = Int(sysBuffer.format.channelCount)
 
@@ -188,6 +197,7 @@ extension AppDelegate {
         for c in 0..<micSampleFIFO.count {
             micSampleFIFO[c].removeFirst(available)
         }
+        micFIFOLock.unlock()
     }
 }
 
