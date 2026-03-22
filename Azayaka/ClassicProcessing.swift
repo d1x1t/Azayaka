@@ -117,9 +117,6 @@ extension AppDelegate {
         }
     }
 
-    private var micConverter: AVAudioConverter?
-    private var micConverterInputFormat: AVAudioFormat?
-
     func convertBuffer(_ input: AVAudioPCMBuffer, to outputFormat: AVAudioFormat) -> AVAudioPCMBuffer? {
         // Skip conversion if formats already match
         if input.format.sampleRate == outputFormat.sampleRate && input.format.channelCount == outputFormat.channelCount {

@@ -58,6 +58,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, SCStreamDelegate, SCStreamOu
     let audioEngine = AVAudioEngine()
     var startTime: Date?
     var pendingMicBuffers: [AVAudioPCMBuffer] = []
+    var micConverter: AVAudioConverter?
+    var micConverterInputFormat: AVAudioFormat?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         lazy var userDesktop = (NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true) as [String]).first!
