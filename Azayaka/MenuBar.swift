@@ -27,7 +27,7 @@ struct MenuBar: View {
                         .offset(y: -0.5)
                         .monospacedDigit()
                 } else {
-                    Image("menuBarIcon")
+                    Image(systemName: "app.fill")
                 }
             }
         }
